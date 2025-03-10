@@ -1,27 +1,24 @@
-// 插件块必须位于顶部
-plugins {
-    id "com.android.library"
-    id "kotlin-android"
-}
-
-group = "com.morbit.amap_flutter"
+group = "com.morbit.amap_flutter" // 保留原 group
 version = "1.0-SNAPSHOT"
 
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
 buildscript {
-    ext.kotlin_version = "1.9.10"
+    ext.kotlin_version = "1.9.10" // 与主项目一致
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:8.3.0"
+        classpath "com.android.tools.build:gradle:8.3.0" // 与主项目一致
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 android {
     namespace "com.morbit.amap_flutter"
-    compileSdk 35
+    compileSdk 35 // 与主项目一致
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -34,33 +31,23 @@ android {
 
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
-        test.java.srcDirs += "src/test/kotlin"
     }
 
     defaultConfig {
-        minSdk 21
+        minSdk 21 // 与主项目一致
+        consumerProguardFiles 'consumer-rules.pro' // 保留新配置的优化
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
+    packagingOptions {
+        merge 'AndroidManifest.xml'
+        merge 'R.txt'
+        merge 'classes.jar'
+        merge 'proguard.txt'
     }
 
     dependencies {
-        implementation 'com.amap.api:3dmap:9.8.3'
-        implementation 'com.amap.api:location:6.4.3'
-        testImplementation "org.jetbrains.kotlin:kotlin-test"
-        testImplementation "org.mockito:mockito-core:5.0.0"
-    }
-
-    testOptions {
-        unitTests.all {
-            useJUnitPlatform()
-            testLogging {
-                events "passed", "skipped", "failed", "standardOut", "standardError"
-                outputs.upToDateWhen { false }
-                showStandardStreams = true
-            }
-        }
+        implementation 'com.amap.api:location:6.4.9' // 新配置的定位版本
+        implementation 'com.amap.api:3dmap:9.8.3' // 保留原有 3D 地图支持
     }
 }
 
