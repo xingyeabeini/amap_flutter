@@ -5,7 +5,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 buildscript {
-    ext.kotlin_version = "1.9.10" // 与主项目一致
+    ext.kotlin_version = "1.9.10" // 与星野主项目一致
     repositories {
         google()
         mavenCentral()
