@@ -7,34 +7,29 @@ buildscript {
         google()
         mavenCentral()
     }
-
     dependencies {
-        classpath("com.android.tools.build:gradle:8.3.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath "com.android.tools.build:gradle:8.3.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+// 使用 plugins 块替代 apply plugin，与主项目一致
+plugins {
+    id "com.android.library"
+    id "kotlin-android"
 }
-
-apply plugin: "com.android.library"
-apply plugin: "kotlin-android"
 
 android {
-    namespace = "com.morbit.amap_flutter"
-    compileSdk = 35
+    namespace "com.morbit.amap_flutter"
+    compileSdk 35
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
+        jvmTarget = "17"
     }
 
     sourceSets {
@@ -43,7 +38,7 @@ android {
     }
 
     defaultConfig {
-        minSdk = 17
+        minSdk 21 // 提高到 21，与高德 SDK 和主项目一致
     }
 
     lintOptions {
@@ -53,28 +48,32 @@ android {
     dependencies {
         // 3D地图
         implementation 'com.amap.api:3dmap:9.8.3'
-        // 2D地图
-//        implementation 'com.amap.api:map2d:latest.integration'
-        // 导航
-//        implementation 'com.amap.api:navi-3dmap:latest.integration'
-        // 搜索
-//        implementation 'com.amap.api:search:latest.integration'
-        // 定位
-//        implementation 'com.amap.api:location:latest.integration'
+        // 定位（必须启用）
+        implementation 'com.amap.api:location:6.4.3' // 使用具体版本，避免 latest.integration 的不稳定性
+        // 可选：根据需要启用其他模块
+        // implementation 'com.amap.api:map2d:9.8.3'
+        // implementation 'com.amap.api:navi-3dmap:9.8.3'
+        // implementation 'com.amap.api:search:9.8.3'
 
-        testImplementation("org.jetbrains.kotlin:kotlin-test")
-        testImplementation("org.mockito:mockito-core:5.0.0")
+        testImplementation "org.jetbrains.kotlin:kotlin-test"
+        testImplementation "org.mockito:mockito-core:5.0.0"
     }
 
     testOptions {
         unitTests.all {
             useJUnitPlatform()
-
             testLogging {
                 events "passed", "skipped", "failed", "standardOut", "standardError"
                 outputs.upToDateWhen { false }
                 showStandardStreams = true
             }
         }
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
 }
